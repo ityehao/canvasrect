@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+<canvas id="canvas" width="1300" height="650"></canvas>
+<script>
+    var c=document.getElementById("canvas");
+    var ctx= c.getContext("2d");
+    function Rect(x,y,width,height,lineWidth,fillColor,strokeColor,vx,vy){
+        this.x=x;
+        this.y=y;
+        this.width=width;
+        this.height=height;
+        this.lineWidth=lineWidth;
+        this.fillColor=fillColor;
+        this.strokeColor=strokeColor;
+        this.vx=vx;
+        this.vy=vy;
+    }
+    Rect.prototype={
+        draw:function(ctx){
+            ctx.beginPath();
+            ctx.rect(this.x,this.y,this.width,this.height);
+            ctx.fillStyle=this.fillColor;
+            ctx.strokeStyle=this.strokeColor;
+            ctx.lineWidth=this.lineWidth;
+            ctx.fill();
+            ctx.stroke();
+        },
+        update:function(){
+            if(this.vx>0){
+                if(this.x+this.width<=1200){
+                    this.x+=this.vx;
+                }else{
+                    this.vx=-this.vx;
+                }
+            }else{
+                if(this.x>=0){
+                    this.x+=this.vx;
+                }else{
+                    this.vx=-this.vx;
+                }
+            }
+
+            if(this.vy>0){
+                if(this.y+this.height<=650){
+                    this.y+=this.vy;
+                }else{
+                    this.vy=-this.vy;
+                }
+            }else{
+                if(this.y>=0){
+                    this.y+=this.vy;
+                }else{
+                    this.vy=-this.vy;
+                }
+            }
+
+        }
+    }
+    var rect1=new Rect(0,200,100,100,3,"yellow","purple",3,5);
+    var rect2=new Rect(1200,500,200,200,3,"yellow","purple",-2,-3);
+    var timer=setInterval(function(){
+        ctx.clearRect(0,0,1300,650);
+        rect1.draw(ctx);
+        rect1.update();
+        rect2.draw(ctx);
+        rect2.update();
+        if(Math.abs(rect1.x+rect1.width/2-rect2.x-rect2.width/2)<
+                (rect1.width+rect2.width)/2 &&
+                Math.abs(rect1.y+rect1.height/2-rect2.y-rect2.height/2)<
+                (rect1.height+rect2.height)/2){
+                rect1.vx=-rect1.vx;
+                rect2.vx=-rect2.vx;
+               rect1.vy=-rect1.vy;
+               rect2.vy=-rect2.vy;
+
+        }
+    },17)
+
+</script>
+</body>
+</html>
